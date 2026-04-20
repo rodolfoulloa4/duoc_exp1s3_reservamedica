@@ -1,44 +1,71 @@
 package com.rulloa.s3d.reservamedica.model;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "citas")
 public class Cita {
-    private Long id;
-    private String paciente;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cita_seq")
+    @SequenceGenerator(name = "cita_seq", sequenceName = "cita_seq", allocationSize = 1)
+    private Integer id;
+
+    @Column(name = "nombre_paciente", nullable = false)
+    private String nombre_paciente;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_profesional", nullable = false)
+    private Profesional profesional;
+
+    @Column(name = "inicio", nullable = false)
     private LocalDateTime inicio;
+
+    @Column(name = "fin", nullable = false)
+    private LocalDateTime fin;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado", nullable = false)
     private EstadoCita estado;
 
+    public enum EstadoCita {
+        PROGRAMADA,
+        CANCELADA
+    }
+
     public Cita() {}
-    public Cita(Long id, String paciente, LocalDateTime inicio, EstadoCita estado) {
+    public Cita(Integer id, String nombre_paciente, Profesional profesional, LocalDateTime inicio, EstadoCita estado) {
         this.id = id;
-        this.paciente = paciente;
+        this.nombre_paciente = nombre_paciente;
+        this.profesional = profesional;
         this.inicio = inicio;
         this.estado = estado;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getPaciente() {
-        return paciente;
+    public String getNombre_paciente() {
+        return nombre_paciente;
     }
 
-    public void setPaciente(String paciente) {
-        this.paciente = paciente;
+    public void setNombre_paciente(String nombre_paciente) {
+        this.nombre_paciente = nombre_paciente;
     }
 
-    public LocalDateTime getInicio() {
-        return inicio;
-    }
+    public LocalDateTime getInicio() { return inicio; }
+    public void setInicio(LocalDateTime inicio) { this.inicio = inicio; }
 
-    public void setInicio(LocalDateTime inicio) {
-        this.inicio = inicio;
-    }
+    public LocalDateTime getFin() { return fin; }
+    public void setFin(LocalDateTime fin) { this.fin = fin; }
+
+    public Profesional getProfesional() { return profesional; }
+    public void setProfesional(Profesional profesional) { this.profesional = profesional; }
 
     public EstadoCita getEstado() {
         return estado;
