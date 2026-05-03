@@ -1,5 +1,7 @@
 package com.rulloa.s3d.reservamedica.model;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -11,9 +13,11 @@ public class Cita {
     @SequenceGenerator(name = "cita_seq", sequenceName = "cita_seq", allocationSize = 1)
     private Integer id;
 
+    @NotBlank(message = "El nombre del paciente es obligatorio")
     @Column(name = "nombre_paciente", nullable = false)
     private String nombre_paciente;
 
+    @NotNull(message = "El profesional es obligatorio")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_profesional", nullable = false)
     private Profesional profesional;
